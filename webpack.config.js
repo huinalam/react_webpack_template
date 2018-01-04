@@ -1,4 +1,5 @@
 const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
@@ -21,12 +22,19 @@ module.exports = (env) => {
         },
         plugins: [
             new CleanWebpackPlugin(['dist']),
+            new webpack.NamedModulesPlugin(),
+            new webpack.HotModuleReplacementPlugin(),
+            new webpack.DefinePlugin({
+                'process.env.NODE_ENV': isDevBuild ? JSON.stringify('develope') : JSON.stringify('production')
+              }),
+        ].concat(isDevBuild ? [
             new HtmlWebpackPlugin({
                 title: 'Development'
             }),
-            new webpack.NamedModulesPlugin(),
-            new webpack.HotModuleReplacementPlugin()
-        ],
+        ] : [
+            new webpack.optimize.UglifyJsPlugin(),
+            new ExtractTextPlugin('app.css')
+        ]),
         module: {
             rules: [
                 {

@@ -1,31 +1,43 @@
 import './style.css';
 import Print from './print.jsx';
 import Header from './Header.jsx';
+import Home from './Home.jsx';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader'; // required
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 
 
 function component() {
     var element = document.createElement('div');
-
-    // Lodash, now imported by this script
-    element.innerHTML = "hello!"
+    element.innerHTML = "Loading..."
     element.id = "main";
-    element.classList.add('hello');
-    element.classList.add('hi');
-
     return element;
 }
 
 document.body.appendChild(component());
-RenderHeader();
+RenderApp();
 
-function RenderHeader() {
+function RenderApp() {
     ReactDOM.render(
         <AppContainer>
-            <Header />
+            <Router>
+                <div>
+                    <div>
+                        <Link to={`/`}>
+                            header
+                    </Link>
+                        <Link to={`/home`}>
+                            home
+                    </Link>
+                    </div>
+                    <div>
+                        <Route exact path="/" component={Header} />
+                        <Route path="/home" component={Home} />
+                    </div>
+                </div>
+            </Router>
         </AppContainer>,
         document.getElementById('main')
     );
@@ -33,6 +45,6 @@ function RenderHeader() {
 
 if (module.hot) {
     module.hot.accept('./Header.jsx', function () {
-        RenderHeader();
+        RenderApp();
     })
 }
